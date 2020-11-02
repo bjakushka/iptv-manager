@@ -1,0 +1,26 @@
+#!.venv/bin/python
+
+import click
+from flask.cli import FlaskGroup
+
+
+def create_app(info):
+    from app import app
+    return app
+
+
+@click.group(cls=FlaskGroup, create_app=create_app)
+def cli():
+    pass
+
+
+@cli.command('hello', short_help='Shows greet message')
+@click.option('--name', default=None, help='Name to personalize greet message')
+def hello(name):
+    """Shows greet message"""
+    greet_message = "Hello, {}".format(name if name else "stranger")
+    click.echo(greet_message)
+
+
+if __name__ == '__main__':
+    cli()
