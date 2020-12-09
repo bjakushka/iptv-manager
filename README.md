@@ -20,3 +20,7 @@ pip install -r requirements.txt
 ./cli db upgrade
 
 ```
+
+Or you can simply use command `make init` to do steps described above.
+Also the command `make clean` can be used for cleaning development environment.
+And you can combine these commands like this `make clean init` to recreate the environment.
