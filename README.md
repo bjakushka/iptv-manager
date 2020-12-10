@@ -24,3 +24,45 @@ pip install -r requirements.txt
 Or you can simply use command `make init` to do steps described above.
 Also the command `make clean` can be used for cleaning development environment.
 And you can combine these commands like this `make clean init` to recreate the environment.
+
+
+### CLI-commands
+
+There are available some cli-commands to interact with.
+For example, you can run server for development like this:
+
+```
+./cli run --host=0.0.0.0 --port=8000
+```
+
+This command will run server provided by Flask on port `8000`
+and the application will be available by address `http://192.168.1.2:8000`
+if your host machine has ip address `192.168.1.2`. **But don't use this server
+in production!**
+
+Other CLI-commands are described below by groups.
+
+#### CLI-commands related to testing
+
+```
+# run all tests with detailed information
+./cli test:run
+
+# run all tests quietly
+./cli test:run -q
+
+# run only modular tests
+./cli test:run --modular-only
+
+# run only those tests which are testing web-pages
+./cli test:run --web-only
+
+# show code coverage
+./cli test:coverage
+
+# list all fixtures
+./cli test:fixtures
+
+# list all markers
+./cli test:markers
+```
