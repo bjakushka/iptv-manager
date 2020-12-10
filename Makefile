@@ -22,6 +22,7 @@ init:
 clean:
 	@echo "Cleaning..."
 	@rm -rf --verbose .venv
+	@rm -rf --verbose .coverage
 	@rm -rf logs/*
 	@rm -rf app/__pycache__/
 	@printf "Done!\n\n"

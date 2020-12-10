@@ -1,6 +1,7 @@
 #!.venv/bin/python
 
 import click
+import os
 from flask.cli import FlaskGroup
 
 
@@ -20,6 +21,74 @@ def hello(name):
     """Shows greet message"""
     greet_message = "Hello, {}".format(name if name else "stranger")
     click.echo(greet_message)
+
+
+#
+# test:
+#
+
+@cli.command('test:run', short_help='Runs tests')
+@click.option('-q', '--quiet', is_flag=True, help='Run tests quietly')
+@click.option('--modular-only', is_flag=True, help='Run only modular tests')
+@click.option('--web-only', is_flag=True, help='Run only web-related tests')
+@click.option('--cov', is_flag=True, help='Run tests with coverage')
+@click.argument('files', nargs=-1)
+def test_run(quiet, modular_only, web_only, cov, files):
+    """Runs the unit tests without test coverage
+    By default runs all tests, but you can choose what to include.
+    """
+    options = []
+
+    if quiet:
+        options.append('-q')
+    else:
+        options.append('-v')
+
+    marks = []
+
+    if web_only:
+        marks.append('webtest')
+
+    if modular_only:
+        marks.append('not webtest')
+
+    user_defined_marks = '' if not marks else '(' + ') or ('.join(marks) + ') and '
+    options.append('-m "{}not skip"'.format(user_defined_marks))
+
+    if cov:
+        options.append('--cov')
+        options.append('--cov-config=setup.cfg')
+
+    if files:
+        options = options + list(files)
+
+    command = f'{get_path_to_executables()}python -m pytest ' + ' '.join(options)
+    print(command)
+
+    os.system(command)
+
+
+@cli.command('test:fixtures', short_help='Show existing tests\' fixtures')
+def test_fixtures():
+    """Shows existing tests' fixtures"""
+    os.system(f'{get_path_to_executables()}python -m pytest --fixtures')
+
+
+@cli.command('test:markers', short_help='Show existing tests\' markers')
+def test_markers():
+    """Shows existing tests' markers"""
+    os.system(f'{get_path_to_executables()}python -m pytest --markers')
+
+
+@cli.command('test:coverage', short_help='Runs tests with coverage')
+def test_coverage():
+    """Runs the unit tests with getting info about test coverage"""
+    os.system(f'{get_path_to_executables()}coverage run -m pytest && {get_path_to_executables()}coverage report -m')
+
+
+def get_path_to_executables():
+    """Returns name of python-executable."""
+    return '.venv/bin/'
 
 
 if __name__ == '__main__':
