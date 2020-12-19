@@ -107,3 +107,4 @@ class DefaultConfiguration:
     SECRET_KEY = None
     JSON_SORT_KEYS = True
     JSON_PRETTYPRINT_REGULAR = False
+    IN_VIRTUALENV = False

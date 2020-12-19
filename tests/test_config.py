@@ -21,11 +21,12 @@ def test_config_loader_empty_file_no_env(tmp_path):
         ('SECRET_KEY', None),
         ('JSON_SORT_KEYS', True),
         ('JSON_PRETTYPRINT_REGULAR', False),
+        ('IN_VIRTUALENV', False),
     ]
 
     config = ConfigLoader(str(env_file)).get_config()
     assert isinstance(config, flask.Config), ''
-    assert len(config) == 6, 'Unexpected amount of configuration-keys'
+    assert len(config) == 7, 'Unexpected amount of configuration-keys'
     for case in test_cases:
         assert config.get(case[0]) == case[1], \
             'Default value of `{}` should be `{}`'.format(case[0], case[1])
@@ -192,7 +193,7 @@ def test_load_config_from_env_some_keys_accepted(tmp_path):
 def test_load_default_config():
     """Loading of configuration by default"""
     config = ConfigLoader.load_default_config()
-    assert len(config) == 6, 'Not expected amount of config-keys'
+    assert len(config) == 7, 'Not expected amount of config-keys'
 
 
 # parsing

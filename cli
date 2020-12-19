@@ -2,6 +2,8 @@
 
 import click
 import os
+
+from flask import current_app
 from flask.cli import FlaskGroup
 
 # do not load environment variables from `.env`-file automatically
@@ -92,7 +94,9 @@ def test_coverage():
 
 def get_path_to_executables():
     """Returns name of python-executable."""
-    return '.venv/bin/'
+    if current_app.config.get('IN_VIRTUALENV'):
+        return '.venv/bin/'
+    return ''
 
 
 if __name__ == '__main__':
