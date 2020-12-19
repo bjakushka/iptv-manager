@@ -2,6 +2,8 @@ all:
 	@echo "Available targets:"
 	@echo "    init"
 	@echo "    clean"
+	@echo "    test"
+	@echo "    lint"
 	@echo "    run"
 
 # Initializing environment for development
@@ -25,7 +27,16 @@ clean:
 	@rm -rf --verbose .coverage
 	@rm -rf logs/*
 	@rm -rf app/__pycache__/
+	@rm -rf .pytest_cache
 	@printf "Done!\n\n"
+
+# Testing
+test:
+	@./cli test:lint --critical && ./cli test:run
+
+# Run code linting
+lint:
+	@./cli test:lint --critical && ./cli test:lint
 
 # Shortcut for running development server
 run:

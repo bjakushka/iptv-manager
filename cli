@@ -2,6 +2,7 @@
 
 import click
 import os
+import sys
 
 from flask import current_app
 from flask.cli import FlaskGroup
@@ -11,6 +12,7 @@ from flask.cli import FlaskGroup
 os.environ['FLASK_SKIP_DOTENV'] = '1'
 
 
+# noinspection PyUnusedLocal
 def create_app(info):
     from app import app
     return app
@@ -90,6 +92,20 @@ def test_markers():
 def test_coverage():
     """Runs the unit tests with getting info about test coverage"""
     os.system(f'{get_path_to_executables()}coverage run -m pytest && {get_path_to_executables()}coverage report -m')
+
+
+@cli.command('test:lint', short_help='Runs code linting')
+@click.option('--critical', is_flag=True, help='Run only critical rules')
+def test_lint(critical):
+    command = f'{get_path_to_executables()}flake8'
+
+    if critical:
+        # stop the build if there are Python syntax errors or undefined names
+        exit_code = os.system(f'{command} . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=.venv')
+        sys.exit(exit_code)
+
+    # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+    os.system(f'{command} . --count --max-complexity=10 --max-line-length=127 --statistics --exclude=.venv')
 
 
 def get_path_to_executables():
