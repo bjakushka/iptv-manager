@@ -24,9 +24,10 @@ pip install -r requirements.txt
 
 ```
 
-Or you can simply use command `make init` to do steps described above.
+Or you can simply use command `make init` to do steps described above (except those related to database).
 Also the command `make clean` can be used for cleaning development environment.
 And you can combine these commands like this `make clean init` to recreate the environment.
+Just run `make` to see little help with all available commands.
 
 
 ### CLI-commands
@@ -77,4 +78,53 @@ Other CLI-commands are described below by groups.
 
 # run only critical code linting
 ./cli test:lint --critical
+```
+
+#### CLI-commands for interacting with database
+
+```
+# initializing of migrations repository
+./cli db init
+
+# run all migrations that have not ran yet
+./cli db upgrade
+
+# show sql-code which is going to be executed
+./cli db upgrade --sql
+
+# migrate to specific mugration
+./cli db upgrade <REVISION_HASH>
+
+# create new migration-file with name
+./cli db revision -m "Some new migration"
+
+# revert to previous version
+./cli db downgrade
+
+# revert all migrations
+./cli db downgrade base
+
+# show list of migrations that already ran
+# If flag `-i` specified - indicates what revision is current
+./cli db history [-i]
+
+# show detailed list of migrations
+./cli db show
+
+```
+
+### Installed dependencies
+
+Only following packages have been installed manually.
+Other packages described in `requirements.txt` have been added as dependencies of these packages.
+
+```
+Flask
+pytest
+coverage
+python-dotenv
+flake8
+Flask-SQLAlchemy
+Flask-Migrate
+PyMySql
 ```
