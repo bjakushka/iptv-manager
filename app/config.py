@@ -108,3 +108,8 @@ class DefaultConfiguration:
     JSON_SORT_KEYS = True
     JSON_PRETTYPRINT_REGULAR = False
     IN_VIRTUALENV = False
+
+    # database
+    #
+    SQLALCHEMY_DATABASE_URI = ''
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
