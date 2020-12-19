@@ -4,6 +4,10 @@ import click
 import os
 from flask.cli import FlaskGroup
 
+# do not load environment variables from `.env`-file automatically
+# if this will not be done - tests (`test_config.py`) will fail
+os.environ['FLASK_SKIP_DOTENV'] = '1'
+
 
 def create_app(info):
     from app import app
