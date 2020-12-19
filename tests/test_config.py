@@ -61,8 +61,8 @@ def test_config_loader_non_empty_file_with_env(tmp_path):
         os.environ['SECRET_KEY'] = old_value
     del os.environ['NOT_ACCEPTED_KEY']
 
-    assert config.get(
-        'SECRET_KEY') == 'super_secret_key_from_env', 'Keys from environment must take precedence over defaults and values from `.env`-file'
+    assert config.get('SECRET_KEY') == 'super_secret_key_from_env', \
+        'Keys from environment must take precedence over defaults and values from `.env`-file'
     assert 'NOT_ACCEPTED_KEY' not in config, 'Not allowed keys should not be added'
 
 

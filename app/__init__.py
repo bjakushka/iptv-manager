@@ -6,4 +6,4 @@ from .config import Loader as ConfigLoader
 app = Flask(__name__)
 app.config.update(ConfigLoader().get_config())
 
-from app import views
+from app import views  # noqa: E402 F401
