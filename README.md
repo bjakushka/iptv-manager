@@ -43,6 +43,9 @@ and the application will be available by address `http://192.168.1.2:8000`
 if your host machine has ip address `192.168.1.2`. **But don't use this server
 in production!**
 
+NOTE: before using `./cli` directly, you should make it executable (`chmod +x ./cli`).
+Otherwise use this way: `python ./cli`
+
 Other CLI-commands are described below by groups.
 
 #### CLI-commands related to testing
@@ -68,4 +71,10 @@ Other CLI-commands are described below by groups.
 
 # list all markers
 ./cli test:markers
+
+# run code linting
+./cli test:lint
+
+# run only critical code linting
+./cli test:lint --critical
 ```
