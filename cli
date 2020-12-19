@@ -73,7 +73,8 @@ def test_run(quiet, modular_only, web_only, cov, files):
     command = f'{get_path_to_executables()}python -m pytest ' + ' '.join(options)
     print(command)
 
-    os.system(command)
+    exit_code = os.system(command)
+    sys.exit(exit_code)
 
 
 @cli.command('test:fixtures', short_help='Show existing tests\' fixtures')

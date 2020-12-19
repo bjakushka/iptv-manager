@@ -1,4 +1,7 @@
 # IPTV-Manager
+
+[![Lint and test](https://github.com/bjakushka/iptv-manager/workflows/Lint%20and%20test/badge.svg?branch=main)](https://github.com/bjakushka/iptv-manager/actions?query=workflow%3A%22Lint+and+test%22)
+
 Flask-based app for managing IPTV sources
 
 Minimum required version of python: 3.8
