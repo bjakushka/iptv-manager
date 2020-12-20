@@ -1,0 +1,30 @@
+{
+  "name": "iptv-manager",
+  "version": "0.0.0",
+  "description": "Frontend for Flask-based application for managing IPTV sources",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config ./webpack.config.js",
+    "dev": "webpack-dev-server --color --config ./webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bjakushka/iptv-manager.git"
+  },
+  "author": "Kyrylo Petrov <bjakushka@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/bjakushka/iptv-manager/issues"
+  },
+  "homepage": "https://github.com/bjakushka/iptv-manager#readme",
+  "dependencies": {
+    "html-webpack-plugin": "^4.5.0",
+    "webpack": "^5.11.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}

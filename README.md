@@ -7,7 +7,9 @@ Flask-based app for managing IPTV sources
 Minimum required version of python: 3.8
 
 ### How to deploy for development:
-When you cloned project for the first time and want to start developing (or just play around) you have to do the following actions to deploy the project:
+When you cloned project for the first time and want to start developing 
+(or just play around) you have to do the following actions 
+to deploy the project:
 
 ```
 # configure virtual environment
@@ -22,6 +24,14 @@ pip install -r requirements.txt
 # run database migrations
 ./cli db upgrade
 
+# install npm-packages
+npm install
+
+# build frontend
+npm run build
+
+# or run devServer
+npm run dev
 ```
 
 Or you can simply use command `make init` to do steps described above (except those related to database).
@@ -110,7 +120,6 @@ Other CLI-commands are described below by groups.
 
 # show detailed list of migrations
 ./cli db show
-
 ```
 
 ### Installed dependencies

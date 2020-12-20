@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from .config import Loader as ConfigLoader
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../public')
 app.config.update(ConfigLoader().get_config())
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)

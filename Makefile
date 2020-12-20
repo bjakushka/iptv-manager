@@ -18,6 +18,10 @@ init:
 
 	@echo "\nInstalling requirements..."
 	@.venv/bin/pip install -r requirements.txt
+
+	@echo "\nInstalling npm-packages..."
+	@npm install
+	@npm run build
 	@echo "Done!"
 
 # Cleaning environment
@@ -25,6 +29,9 @@ clean:
 	@echo "Cleaning..."
 	@rm -rf --verbose .venv
 	@rm -rf --verbose .coverage
+	@rm -rf --verbose public/index.html public/assets
+	@rm -rf --verbose public/assets
+	@rm -rf --verbose node_modules
 	@rm -rf logs/*
 	@rm -rf app/__pycache__/
 	@rm -rf .pytest_cache
