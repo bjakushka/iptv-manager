@@ -3,7 +3,9 @@ const path = require('path');
 
 //
 // webpack plugins
+const {VueLoaderPlugin} = require('vue-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Webpack = require('webpack');
 
 const PATHS = {
@@ -26,7 +28,19 @@ module.exports = {
     },
 
     module: {
-        rules: []
+        rules: [
+            {
+                test: /\.css$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader'
+                ]
+            },
+            {
+                test: /\.vue$/,
+                use: ['vue-loader']
+            },
+        ]
     },
 
     // used plugins
@@ -37,6 +51,10 @@ module.exports = {
             inject: true,
             hash: true,
         }),
+        new MiniCssExtractPlugin({
+            filename: 'assets/styles.css'
+        }),
+        new VueLoaderPlugin(),
         // enables support for HMR (see `devServer` section)
         new Webpack.HotModuleReplacementPlugin(),
     ],
