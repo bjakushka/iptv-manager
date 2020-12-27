@@ -13,3 +13,7 @@ migrate = Migrate(app, db)
 api = Api(app)
 
 from . import views  # noqa: E402 F401
+
+
+def create_app():
+    return app
