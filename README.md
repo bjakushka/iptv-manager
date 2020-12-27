@@ -136,4 +136,5 @@ flake8
 Flask-SQLAlchemy
 Flask-Migrate
 PyMySql
+Flask-Restful
 ```

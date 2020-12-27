@@ -1,6 +1,11 @@
-from . import app
-from flask import send_from_directory, jsonify
+from app import app, api
+from flask import send_from_directory
+from .ping import Ping
 
+
+#
+# FRONTEND
+#
 
 @app.route('/', methods=['GET'])
 def index():
@@ -12,10 +17,8 @@ def static_dist(path):
     return send_from_directory('../public/assets', path)
 
 
-@app.route('/api/ping')
-def api_ping():
-    return jsonify({
-        'data': {
-            'answer': 'pong',
-        },
-    })
+#
+# API
+#
+
+api.add_resource(Ping, '/api/ping')
