@@ -29,14 +29,15 @@ RUN pip install --upgrade pip && \
 
 # copy project
 COPY . $APP_HOME
-RUN chown -R flask:flask $APP_HOME && \
-    chmod +x $APP_HOME/cli && \
-    chmod +x $APP_HOME/docker-entrypoint.sh
-USER flask
 
 # building frontend
 RUN npm install && \
     npm run build
+
+RUN chown -R flask:flask $APP_HOME && \
+    chmod +x $APP_HOME/cli && \
+    chmod +x $APP_HOME/docker-entrypoint.sh
+USER flask
 
 # run application
 EXPOSE 5000
