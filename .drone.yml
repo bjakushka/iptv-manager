@@ -1,0 +1,157 @@
+---
+kind: pipeline
+type: docker
+name: testing
+
+volumes:
+- name: docker_sock
+  # we need this to use host docker inside pipeline
+  # e.g. when building new image or modifying tags
+  host:
+    path: /var/run/docker.sock
+
+steps:
+- name: start telegram notification
+  # notify that the CI pipeline has been started
+  image: appleboy/drone-telegram
+  when:
+    status: [ success, failure ]
+  settings:
+    token:
+      from_secret: TLEGRAM_BOT_TOKEN
+    to:
+      from_secret: TELEGRAM_USER_ID
+    format: markdown
+    message: >
+      🚀 Building `{{repo.name}}`
+
+      ```
+      {{commit.message}}
+      ```
+
+- name: build image
+  # build a new docker image using Dockerfile from src
+  image: docker
+  commands:
+  - docker build . -t bjakushka/iptv-manager:${DRONE_BUILD_NUMBER}
+  volumes:
+  - name: docker_sock
+    path: /var/run/docker.sock
+
+- name: test
+  # run tests
+  image: bjakushka/iptv-manager:${DRONE_BUILD_NUMBER}
+  environment:
+    # env for python
+    PYTHONDONTWRITEBYTECODE: 1
+    PYTHONUNBUFFERED: 1
+  commands:
+  - cd /home/flask
+  # we are creating `.env` file in a such manner because of the tests which test the configuration
+  # further this have to be rewritten more properly
+  - >
+    printf "FLASK_ENV: testing\nSECRET_KEY: super_secret_key\nIN_VIRTUAL_ENV: False\nTESTING_DATABASE: mysql+pymysql://root:root@service__db:3306/iptv_manager_test\n" > .env
+  # run tests
+  - python -m pytest -v
+
+- name: mark image with tags
+  # if tests have passed we marks new image as `latest`
+  image: docker
+  commands:
+  - docker rmi --force bjakushka/iptv-manager:latest
+  - docker tag bjakushka/iptv-manager:${DRONE_BUILD_NUMBER} bjakushka/iptv-manager:latest
+  - docker tag bjakushka/iptv-manager:${DRONE_BUILD_NUMBER} bjakushka/iptv-manager:${DRONE_TAG##v}
+  volumes:
+  - name: docker_sock
+    path: /var/run/docker.sock
+  when:
+    status:
+    - success
+
+- name: delete build image
+  # despite of status of previous steps - delete tag with build number
+  image: docker
+  commands:
+  # Delete the build image.
+  - docker rmi --force bjakushka/iptv-manager:${DRONE_BUILD_NUMBER}
+  volumes:
+  - name: docker_sock
+    path: /var/run/docker.sock
+  when:
+    status:
+    - success
+    - failure
+
+- name: deploying
+  # run some commands of the server to deploy latest image
+  # only if all previous steps have been succeed
+  image: appleboy/drone-ssh
+  settings:
+    host:
+      from_secret: SSH_HOST
+    port:
+      from_secret: SSH_PORT
+    username:
+      from_secret: SSH_USERNAME
+    key:
+      from_secret: SSH_KEY
+    script:
+    # I want to use command set up via secrets but now I cannot do this
+    # due to some problems with `envs` parameter:
+    # https://github.com/appleboy/drone-ssh/issues/130
+    - /opt/docker/deploy_iptv_manager.sh
+  when:
+    status:
+    - success
+
+- name: finish telegram notification
+  # notify that the CI pipeline has been finished with some status
+  image: appleboy/drone-telegram
+  when:
+    status: [ success, failure ]
+  settings:
+    token:
+      from_secret: TLEGRAM_BOT_TOKEN
+    to:
+      from_secret: TELEGRAM_USER_ID
+    format: markdown
+    message: >
+      {{#success build.status}}
+      ✅ Build of `{{repo.name}}` **succeeded**!
+
+
+      📝 Commit by {{commit.author}} on `{{commit.branch}}`:
+
+      ```
+      {{commit.message}}
+      ```
+
+
+      {{ build.link }}
+      {{else}}
+      ❌ Build of `{{repo.name}}` **failed**!
+
+
+      📝 Commit by {{commit.author}} on `{{commit.branch}}`:
+
+      ```
+      {{commit.message}}
+      ```
+
+
+      {{ build.link }}
+      {{/success}}
+
+services:
+- name: service__db
+  # this database stays running during the whole pipeline and can be accessed from any of the other steps.
+  image: mariadb:10.1
+  ports:
+  - 3306
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: iptv_manager_test
+
+trigger:
+  event:
+  - tag
