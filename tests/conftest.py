@@ -42,3 +42,49 @@ def client(app_instance, prepare_context):
     client = app_instance.test_client()
 
     yield client
+
+
+@pytest.fixture(scope='session')
+def models():
+    """Returns whole module with all defined models"""
+    from app import models
+    return models
+
+
+@pytest.fixture(scope='function')
+def base_model(models):
+    """Returns instance of BaseModel for testing purposes
+
+    :rtype: app.models.BaseModel
+    """
+    return models.BaseModel()
+
+
+@pytest.fixture(scope='session')
+def almost_base_model_class(models):
+    """Returns class which is "almost" like BaseClass
+
+    Defines minimally modified sub-class of BaseModel.
+    This class created for test some basic methods defined in BaseModel.
+
+    :rtype: type of app.models.BaseModel
+    """
+    from app import db
+
+    class AlmostBaseModel(models.BaseModel):
+        __tablename__ = 'not_existing_table'
+
+        # own properties
+        id = db.Column(db.Integer, primary_key=True)
+
+    return AlmostBaseModel
+
+
+@pytest.fixture(scope='function')
+def almost_base_model(almost_base_model_class):
+    """Returns instance of AlmostBaseModel
+
+    :param almost_base_model_class:
+    :rtype: app.models.BaseModel
+    """
+    return almost_base_model_class(id=42)
