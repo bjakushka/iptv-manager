@@ -1,4 +1,4 @@
-'''Main entry point to the application'''
+"""Main entry point to the application"""
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
@@ -23,6 +23,7 @@ migrate = Migrate(app, db)
 api = Api(app)
 
 from . import views  # noqa: E402 F401
+from . import models  # noqa: E402 F401
 
 
 def create_app():
