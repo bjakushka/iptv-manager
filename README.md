@@ -174,6 +174,60 @@ Other CLI-commands are described below by groups.
 
 </details>
 
+<details>
+    <summary><strong>CLI-commands for testing&linting</strong></summary>
+
+    # run all tests
+    ./cli test:run
+    
+    # run modular tests only
+    ./cli test:run --modular-only
+    
+    # run tests with coverage
+    ./cli test:run --cov
+    
+    # also you can combine different options
+    ./cli test:run -modular-only --cov
+    
+    # start code linting (all)
+    ./cli test:lint
+    
+    # start code linting (only critical)
+    ./cli test:lint --critical
+    
+    # you can also run coverage like this
+    ./cli test:coverage
+    
+    # display all available fixtures
+    ./cli test:fixtures
+    
+    # list all markers for tests
+    ./cli test:markers
+    
+
+</details>
+
+<details>
+    <summary><strong>How to play around with shell</strong></summary>
+
+    ./cli shell
+    >>> import app
+    >>> channel_1 = app.models.Channel(name='First Channel')
+    >>> channel_1
+    <Channel #[NONE]>
+    >>> app.db.session.add(channel_1)
+    >>> app.db.session.commit()
+    >>> channel_1
+    <Channel #1>
+    >>>
+    >>> channel_2 = app.models.Channel.query.filter_by(id=1).first()
+    >>> channel_2
+    <Channel #1>
+    >>> channel_2.name = 'Channel 2 (edited)'
+    >>> app.db.session.add(channel_2)
+    >>> app.db.session.commit()
+
+</details>
 
 
 ### Project dependencies
@@ -184,6 +238,7 @@ Other packages described in `requirements.txt` have been added as dependencies o
 ```
 Flask
 pytest
+pytest-cov
 coverage
 python-dotenv
 flake8
