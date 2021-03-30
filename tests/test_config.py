@@ -10,7 +10,7 @@ from app.config import Loader as ConfigLoader
 #
 
 def test_config_loader_empty_file_no_env(tmp_path):
-    """Loading application configuration with no `.env`-file or environment variables"""
+    """Loading application configuration with no `.env`-file or env"""
     env_file = tmp_path / ".env"
     env_file.write_text('')
 
@@ -37,17 +37,21 @@ def test_config_loader_empty_file_no_env(tmp_path):
 def test_config_loader_non_empty_file_no_env(tmp_path):
     """Load application configuration with existing `.env`-file"""
     env_file = tmp_path / ".env"
-    env_file.write_text('SECRET_KEY = "super_secret_key"\nNOT_ACCEPTED_KEY = True')
+    content = 'SECRET_KEY = "super_secret_key"\nNOT_ACCEPTED_KEY = True'
+    env_file.write_text(content)
 
     config = ConfigLoader(str(env_file)).get_config()
-    assert config.get('SECRET_KEY') == "super_secret_key", 'Keys from `.env` must take precedence over defaults'
-    assert 'NOT_ACCEPTED_KEY' not in config, 'Not allowed keys should not be added'
+    assert config.get('SECRET_KEY') == "super_secret_key", \
+        'Keys from `.env` must take precedence over defaults'
+    assert 'NOT_ACCEPTED_KEY' not in config, \
+        'Not allowed keys should not be added'
 
 
 def test_config_loader_non_empty_file_with_env(tmp_path):
-    """Load application configuration with existing `.env`-file and environment variables"""
+    """Load application configuration with existing `.env`-file and env"""
     env_file = tmp_path / '.env'
-    env_file.write_text('SECRET_KEY = "super_secret_key\nNOT_ACCEPTED_KEY = True')
+    content = 'SECRET_KEY = "super_secret_key\nNOT_ACCEPTED_KEY = True'
+    env_file.write_text(content)
 
     # modify environment variables
     old_value = getattr(os.environ, 'SECRET_KEY', None)
@@ -64,8 +68,10 @@ def test_config_loader_non_empty_file_with_env(tmp_path):
     del os.environ['NOT_ACCEPTED_KEY']
 
     assert config.get('SECRET_KEY') == 'super_secret_key_from_env', \
-        'Keys from environment must take precedence over defaults and values from `.env`-file'
-    assert 'NOT_ACCEPTED_KEY' not in config, 'Not allowed keys should not be added'
+        'Keys from environment must take precedence ' \
+        'over defaults and values from `.env`-file'
+    assert 'NOT_ACCEPTED_KEY' not in config, \
+        'Not allowed keys should not be added'
 
 
 #
@@ -76,12 +82,13 @@ def test_config_loader_non_empty_file_with_env(tmp_path):
 # loading from .env-file
 
 def test_load_config_from_dotenv_empty_file(tmp_path):
-    """Checks that configuration loading properly works with empty `.env` files"""
+    """Checks configuration loading works with empty `.env` files"""
     env_file = tmp_path / ".env"
     env_file.write_text('')
 
     config = ConfigLoader.load_config_from_dotenv(str(env_file))
-    assert len(config) == 0, 'Empty `.env` should return empty `Config`-instance'
+    assert len(config) == 0, \
+        'Empty `.env` should return empty `Config`-instance'
 
 
 def test_load_config_from_dotenv_non_empty_file(tmp_path):
@@ -90,9 +97,11 @@ def test_load_config_from_dotenv_non_empty_file(tmp_path):
     env_file.write_text('VALID = true\ntruly_invalid = true\nInVaLiD = true')
 
     config = ConfigLoader.load_config_from_dotenv(str(env_file))
-    assert len(config) == 1, 'Resulting `Config`-instance should contain only one key-value pair'
+    assert len(config) == 1, \
+        'Resulting `Config`-instance should contain only one key-value pair'
     assert 'VALID' in config, '`VALID` key should be in resulting config'
-    assert 'InVaLiD' not in config and 'truly_invalid' not in config, 'Other invalid keys should not be in resulting config'
+    assert 'InVaLiD' not in config and 'truly_invalid' not in config, \
+        'Other invalid keys should not be in resulting config'
 
 
 def test_load_config_from_dotenv_non_empty_file_all_keys_accepted(tmp_path):
@@ -100,10 +109,13 @@ def test_load_config_from_dotenv_non_empty_file_all_keys_accepted(tmp_path):
     env_file = tmp_path / ".env"
     env_file.write_text('VALID = true\ntruly_invalid = true\nInVaLiD = true')
 
-    config = ConfigLoader.load_config_from_dotenv(str(env_file), accepted_keys=None)
-    assert len(config) == 1, 'Resulting `Config`-instance should contain only one key-value pair'
+    config = ConfigLoader.load_config_from_dotenv(str(env_file),
+                                                  accepted_keys=None)
+    assert len(config) == 1, \
+        'Resulting `Config`-instance should contain only one key-value pair'
     assert 'VALID' in config, '`VALID` key should be in resulting config'
-    assert 'InVaLiD' not in config and 'truly_invalid' not in config, 'Other invalid keys should not be in resulting config'
+    assert 'InVaLiD' not in config and 'truly_invalid' not in config, \
+        'Other invalid keys should not be in resulting config'
 
 
 def test_load_config_from_dotenv_non_empty_file_no_keys_accepted(tmp_path):
@@ -111,8 +123,11 @@ def test_load_config_from_dotenv_non_empty_file_no_keys_accepted(tmp_path):
     env_file = tmp_path / ".env"
     env_file.write_text('VALID = true\nNOT_ACCEPTED = true\nInVaLiD = true')
 
-    config = ConfigLoader.load_config_from_dotenv(str(env_file), accepted_keys=[])
-    assert len(config) == 0, 'Resulting `Config`-instance should be empty - there are no accepted keys'
+    config = ConfigLoader.load_config_from_dotenv(str(env_file),
+                                                  accepted_keys=[])
+    assert len(config) == 0, \
+        'Resulting `Config`-instance should be empty - ' \
+        'there are no accepted keys'
 
 
 def test_load_config_from_dotenv_non_empty_file_some_keys_accepted(tmp_path):
@@ -120,17 +135,20 @@ def test_load_config_from_dotenv_non_empty_file_some_keys_accepted(tmp_path):
     env_file = tmp_path / ".env"
     env_file.write_text('VALID = true\nNOT_ACCEPTED = true')
 
-    config = ConfigLoader.load_config_from_dotenv(str(env_file), accepted_keys=['VALID'])
-    assert len(config) == 1, 'Resulting `Config`-instance should contain only one key-value pair'
+    config = ConfigLoader.load_config_from_dotenv(str(env_file),
+                                                  accepted_keys=['VALID'])
+    assert len(config) == 1, \
+        'Resulting `Config`-instance should contain only one key-value pair'
     assert 'VALID' in config, 'Accepted keys must be added'
-    assert 'NOT_ACCEPTED' not in config, 'Keys other than accepted must not be added'
+    assert 'NOT_ACCEPTED' not in config, \
+        'Keys other than accepted must not be added'
 
 
 #
 # loading from env
 
 def test_load_config_from_env(tmp_path):
-    """Tests properly work of loading configuration from environment variables"""
+    """Tests work of loading configuration from environment variables"""
     # modify environment variables
     old_value = getattr(os.environ, 'NOT_ACCEPTED_KEY', None)
     os.environ['NOT_ACCEPTED_KEY'] = "-42"
@@ -145,11 +163,13 @@ def test_load_config_from_env(tmp_path):
         os.environ['NOT_ACCEPTED_KEY'] = old_value
     del os.environ['NOT_ACCEPTED_KEY_ANOTHER_ONE']
 
-    assert len(config) == 0, 'Resulting `Config`-instance should be empty - there are no accepted keys'
+    assert len(config) == 0, \
+        'Resulting `Config`-instance should be empty - ' \
+        'there are no accepted keys'
 
 
 def test_load_config_from_env_no_keys_accepted(tmp_path):
-    """Tests properly work of loading configuration from environment variables when no keys are accepting"""
+    """Tests work of loading config from env when no keys are accepting"""
     # modify environment variables
     old_value = getattr(os.environ, 'NOT_ACCEPTED_KEY', None)
     os.environ['NOT_ACCEPTED_KEY'] = "-42"
@@ -164,11 +184,13 @@ def test_load_config_from_env_no_keys_accepted(tmp_path):
         os.environ['NOT_ACCEPTED_KEY'] = old_value
     del os.environ['NOT_ACCEPTED_KEY_ANOTHER_ONE']
 
-    assert len(config) == 0, 'Resulting `Config`-instance should be empty - there are no accepted keys'
+    assert len(config) == 0, \
+        'Resulting `Config`-instance should be empty - ' \
+        'there are no accepted keys'
 
 
 def test_load_config_from_env_some_keys_accepted(tmp_path):
-    """Tests properly work of loading configuration from environment variables when some keys are accepting"""
+    """Tests work of loading config from env when some keys are accepting"""
     # modify environment variables
     old_value = getattr(os.environ, 'ACCEPTED_KEY', None)
     os.environ['ACCEPTED_KEY'] = "-42"
@@ -183,9 +205,11 @@ def test_load_config_from_env_some_keys_accepted(tmp_path):
         os.environ['ACCEPTED_KEY'] = old_value
     del os.environ['NOT_ACCEPTED_KEY']
 
-    assert len(config) == 1, 'Resulting `Config`-instance should contain only one key-value pair'
+    assert len(config) == 1, \
+        'Resulting `Config`-instance should contain only one key-value pair'
     assert 'ACCEPTED_KEY' in config, 'Accepted keys must be added'
-    assert 'NOT_ACCEPTED_KEY' not in config, 'Keys other than accepted must not be added'
+    assert 'NOT_ACCEPTED_KEY' not in config, \
+        'Keys other than accepted must not be added'
 
 
 #
@@ -201,7 +225,7 @@ def test_load_default_config():
 # parsing
 
 def test_parse_string_value_valid_values():
-    """Tests properly work of method, which parse values from `.env`-files, with valid values"""
+    """Tests parsing values from .env`, with valid values"""
     test_cases = [
         ('TRUE', True),
         ('False', False),

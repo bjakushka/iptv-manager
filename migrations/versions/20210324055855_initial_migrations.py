@@ -47,8 +47,10 @@ def _create_table_channel():
         # columns
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('name', sa.String(128), nullable=False),
-        sa.Column('created_at', sa.DateTime(), server_default=sa.text('NOW()'), nullable=False),
-        sa.Column('updated_at', sa.DateTime(), server_default=sa.text('NOW()'), nullable=False),
+        sa.Column('created_at', sa.DateTime(),
+                  server_default=sa.text('NOW()'), nullable=False),
+        sa.Column('updated_at', sa.DateTime(),
+                  server_default=sa.text('NOW()'), nullable=False),
 
         # constraints
         sa.PrimaryKeyConstraint('id'),
@@ -64,12 +66,18 @@ def _create_table_channel_stream():
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('channel_id', sa.Integer(), nullable=False),
         sa.Column('url', sa.Text(), nullable=False),
-        sa.Column('created_at', sa.DateTime(), server_default=sa.text('NOW()'), nullable=False),
-        sa.Column('updated_at', sa.DateTime(), server_default=sa.text('NOW()'), nullable=False),
+        sa.Column('created_at', sa.DateTime(),
+                  server_default=sa.text('NOW()'), nullable=False),
+        sa.Column('updated_at', sa.DateTime(),
+                  server_default=sa.text('NOW()'), nullable=False),
 
         # constraints
         sa.PrimaryKeyConstraint('id'),
-        sa.ForeignKeyConstraint(('channel_id',), [f'{TBL_NAME_CHANNEL}.id'], ondelete='RESTRICT'),
+        sa.ForeignKeyConstraint(
+            ('channel_id',),
+            [f'{TBL_NAME_CHANNEL}.id'],
+            ondelete='RESTRICT'
+        ),
         sa.UniqueConstraint('channel_id'),
     )
 
@@ -81,8 +89,10 @@ def _create_table_playlist():
         # columns
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('name', sa.String(128), nullable=False),
-        sa.Column('created_at', sa.DateTime(), server_default=sa.text('NOW()'), nullable=False),
-        sa.Column('updated_at', sa.DateTime(), server_default=sa.text('NOW()'), nullable=False),
+        sa.Column('created_at', sa.DateTime(),
+                  server_default=sa.text('NOW()'), nullable=False),
+        sa.Column('updated_at', sa.DateTime(),
+                  server_default=sa.text('NOW()'), nullable=False),
 
         # constraints
         sa.PrimaryKeyConstraint('id'),
@@ -98,12 +108,22 @@ def _create_table_playlist_item():
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('channel_id', sa.Integer(), nullable=False),
         sa.Column('playlist_id', sa.Integer(), nullable=False),
-        sa.Column('created_at', sa.DateTime(), server_default=sa.text('NOW()'), nullable=False),
-        sa.Column('updated_at', sa.DateTime(), server_default=sa.text('NOW()'), nullable=False),
+        sa.Column('created_at', sa.DateTime(),
+                  server_default=sa.text('NOW()'), nullable=False),
+        sa.Column('updated_at', sa.DateTime(),
+                  server_default=sa.text('NOW()'), nullable=False),
 
         # constraints
         sa.PrimaryKeyConstraint('id'),
-        sa.ForeignKeyConstraint(('channel_id',), [f'{TBL_NAME_CHANNEL}.id'], ondelete='RESTRICT'),
-        sa.ForeignKeyConstraint(('playlist_id',), [f'{TBL_NAME_PLAYLIST}.id'], ondelete='RESTRICT'),
+        sa.ForeignKeyConstraint(
+            ('channel_id',),
+            [f'{TBL_NAME_CHANNEL}.id'],
+            ondelete='RESTRICT'
+        ),
+        sa.ForeignKeyConstraint(
+            ('playlist_id',),
+            [f'{TBL_NAME_PLAYLIST}.id'],
+            ondelete='RESTRICT'
+        ),
         sa.UniqueConstraint('channel_id', 'playlist_id'),
     )

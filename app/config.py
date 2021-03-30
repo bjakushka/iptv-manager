@@ -29,7 +29,12 @@ class Loader:
         accepted_keys = list(config.keys())
 
         # rewrite keys from default config by values from `.env`-file
-        config.update(self.load_config_from_dotenv(self.env_file, accepted_keys=accepted_keys))
+        config.update(
+            self.load_config_from_dotenv(
+                self.env_file,
+                accepted_keys=accepted_keys
+            )
+        )
 
         # redefine keys by values taken from os environment
         config.update(self.load_config_from_env(accepted_keys=accepted_keys))
@@ -37,10 +42,12 @@ class Loader:
         return config
 
     @classmethod
-    def load_config_from_dotenv(cls, env_file: str, accepted_keys: list = None) -> flask.Config:
+    def load_config_from_dotenv(cls, env_file: str,
+                                accepted_keys: list = None) -> flask.Config:
         """Loads configuration variables from `.env`-file (or similar)
 
-        If param `accepted_keys` is not instance of `list` - ALL keys will be accepted.
+        If param `accepted_keys` is not instance of `list` -
+        ALL keys will be accepted.
 
         :param string env_file: Path to custom file with configuration variables
         :param list of string accepted_keys: List of keys which can be accepted
@@ -57,7 +64,8 @@ class Loader:
     def load_config_from_env(cls, accepted_keys: list = None) -> flask.Config:
         """Loads configuration from system's environment
 
-        If param `accepted_keys` is not instance of `list` - NO keys will be accepted.
+        If param `accepted_keys` is not instance of `list` -
+        NO keys will be accepted.
 
         :param list accepted_keys: List of keys which can be accepted
         :rtype: flask.Config

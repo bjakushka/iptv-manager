@@ -60,7 +60,11 @@ def test_run(quiet, modular_only, web_only, cov, files):
     if modular_only:
         marks.append('not webtest')
 
-    user_defined_marks = '' if not marks else '(' + ') or ('.join(marks) + ') and '
+    if not marks:
+        user_defined_marks = ''
+    else:
+        user_defined_marks = '(' + ') or ('.join(marks) + ') and '
+
     options.append('-m "{}not skip"'.format(user_defined_marks))
 
     if cov:
@@ -70,7 +74,8 @@ def test_run(quiet, modular_only, web_only, cov, files):
     if files:
         options = options + list(files)
 
-    command = f'{get_path_to_executables()}python -m pytest ' + ' '.join(options)
+    command = f'{get_path_to_executables()}python -m pytest ' \
+              + ' '.join(options)
     print(command)
 
     exit_code = os.system(command)
@@ -92,7 +97,9 @@ def test_markers():
 @cli.command('test:coverage', short_help='Runs tests with coverage')
 def test_coverage():
     """Runs the unit tests with getting info about test coverage"""
-    os.system(f'{get_path_to_executables()}coverage run -m pytest && {get_path_to_executables()}coverage report -m')
+    os.system(
+        f'{get_path_to_executables()}coverage run -m pytest && '
+        f'{get_path_to_executables()}coverage report -m')
 
 
 @cli.command('test:lint', short_help='Runs code linting')
@@ -102,11 +109,25 @@ def test_lint(critical):
 
     if critical:
         # stop the build if there are Python syntax errors or undefined names
-        exit_code = os.system(f'{command} . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=.venv')
+        options = [
+            '--count',
+            '--select=E9,F63,F7,F82',
+            '--show-source',
+            '--statistics',
+            '--exclude=.venv',
+        ]
+        exit_code = os.system(f'{command} . ' + ' '.join(options))
         sys.exit(exit_code)
 
-    # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-    os.system(f'{command} . --count --max-complexity=10 --max-line-length=127 --statistics --exclude=.venv')
+    # exit-zero treats all errors as warnings
+    options = [
+        '--count',
+        '--max-complexity=10',
+        '--max-line-length=80',
+        '--statistics',
+        '--exclude=.venv',
+    ]
+    os.system(f'{command} . ' + ' '.join(options))
 
 
 def get_path_to_executables():
