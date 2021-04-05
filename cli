@@ -5,7 +5,7 @@ import os
 import sys
 
 from flask import current_app
-from flask.cli import FlaskGroup
+from flask.cli import FlaskGroup, with_appcontext
 
 # do not load environment variables from `.env`-file automatically
 # if this will not be done - tests (`test_config.py`) will fail
@@ -29,6 +29,20 @@ def hello(name):
     """Shows greet message"""
     greet_message = "Hello, {}".format(name if name else "stranger")
     click.echo(greet_message)
+
+
+@cli.command('seed', short_help='Seed database with data')
+@click.option('--name', default=None, help='Name of seeder-class')
+@with_appcontext
+def seed(name):
+    """Run specific db-seeder by its class name
+
+    Possible class names:
+
+      - `DemoDataSeeder`: seed database with some random demo data
+    """
+    import seeders
+    seeders.run_seeder(name, db=current_app.db)
 
 
 #

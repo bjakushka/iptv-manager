@@ -51,6 +51,9 @@ make init && ./cli db upgrade && make test lint run
     # make the cli-manager executable
     chmod +x ./cli
     
+    # if you have not got real data yet you can seed the demo
+    ./cli seed --name=DemoDataSeeder
+    
     # run backend via development server
     ./cli run --host=0.0.0.0 --port=8000
     

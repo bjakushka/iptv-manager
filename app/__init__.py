@@ -18,7 +18,7 @@ convention = {
     'pk': '%(table_name)s_pk',
 }
 metadata = MetaData(naming_convention=convention)
-db = SQLAlchemy(app, metadata=metadata)
+app.db = db = SQLAlchemy(app, metadata=metadata)
 migrate = Migrate(app, db)
 api = Api(app)
 
