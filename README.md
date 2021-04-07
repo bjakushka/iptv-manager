@@ -5,6 +5,7 @@
 Flask-based app for managing IPTV sources
 
 Minimum required version of python: **3.8**
+Minimum required version of node: **12.13.0**
 
 ### How to deploy for development:
 When you cloned project for the first time and want to start developing 

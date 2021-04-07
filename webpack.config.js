@@ -30,10 +30,11 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.css$/,
+                test: /\.css$/i,
                 use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader'
+                    MiniCssExtractPlugin.loader, // or `'style-loader'` in dev
+                    'css-loader',
+                    'postcss-loader',
                 ]
             },
             {
