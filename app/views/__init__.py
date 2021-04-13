@@ -1,6 +1,8 @@
 from app import app, api
 from flask import send_from_directory
+# resources
 from .ping import Ping
+from .playlists import Playlists
 
 
 #
@@ -22,3 +24,4 @@ def static_dist(path):
 #
 
 api.add_resource(Ping, '/api/ping')
+api.add_resource(Playlists, '/api/playlists', endpoint='playlist')

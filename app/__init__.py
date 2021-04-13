@@ -20,7 +20,7 @@ convention = {
 metadata = MetaData(naming_convention=convention)
 app.db = db = SQLAlchemy(app, metadata=metadata)
 migrate = Migrate(app, db)
-api = Api(app)
+api = Api(app, catch_all_404s=True)
 
 from . import views  # noqa: E402 F401
 from . import models  # noqa: E402 F401
