@@ -70,7 +70,11 @@ module.exports = {
         historyApiFallback: true,
 
         // suppress information messages
-        noInfo: true,
+        noInfo: false,
+
+        // how many info display in console
+        // 'none' | 'errors-only' | 'minimal' | 'normal' | 'verbose'
+        stats: 'minimal',
 
         // show a full-screen overlay in the browser in case of errors
         overlay: true,
