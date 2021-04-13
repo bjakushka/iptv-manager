@@ -6,3 +6,27 @@ export default new Vue({
     el: '#app',
     render: h => h(App),
 });
+
+
+//
+// OTHER
+//
+
+/**
+ * Returns string with readable representation of date.
+ *
+ * @returns {string}
+ */
+Date.prototype.toReadable = function () {
+    let options = {
+        weekday: 'short',
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+    };
+    let locale = 'en-GB';
+
+    return this.toLocaleDateString(locale, options)
+};

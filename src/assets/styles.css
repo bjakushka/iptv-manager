@@ -2,6 +2,14 @@
 @import "tailwindcss/components.css";
 @import "tailwindcss/utilities.css";
 
-body {
-    @apply bg-yellow-200;
+.app--nav-item {
+    @apply px-3 py-2 rounded-md text-sm font-medium;
+}
+
+.app--nav-item.app--nav-item-default {
+    @apply text-gray-300 hover:bg-gray-700 hover:text-white;
+}
+
+.app--nav-item.app--nav-item-active {
+    @apply bg-gray-900 text-white;
 }
