@@ -10,6 +10,6 @@ def test_index_availability(client):
 
 
 def test_not_existing_url(client):
-    """Not existing endpoint must return HTTP Status Code `404`"""
+    """Not existing URL must return `200` and display index page"""
     response = client.get('/not-exists')
-    assert response.status_code == 404
+    assert response.status_code == 200

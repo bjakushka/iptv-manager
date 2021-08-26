@@ -10,3 +10,10 @@ def test_ping(client):
 
     data = response.json.get('data')
     assert dict.get(data, 'answer', None) == 'pong'
+
+
+def test_not_existing_url(client):
+    """Request of not existing api-endpoint have to return 404`
+    """
+    response = client.get('/api/not-existing')
+    assert response.status_code == 404
