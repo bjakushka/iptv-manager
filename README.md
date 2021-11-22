@@ -18,7 +18,11 @@ to deploy the project:
 cp .env.example .env
 
 # initialize environment, database, execute tests and run the app
+# NOTE: set option `IN_VIRTUALENV` in `.env` to `True` or execute `source ./venv/bin/activate` to enter virtual environment
 make init && ./cli db upgrade && make test lint run
+
+# you might want fill the database with some auto-generated data to play around
+./cli seed --name=DemoDataSeeder
 
 # now you can access the app by following address:
 # http://<ip_address_of_your_server>:8000/
@@ -63,6 +67,14 @@ make init && ./cli db upgrade && make test lint run
 
 </details>
 
+During development you might want to run frontend in "hot"-mode:
+
+```
+# start npm in HMR-mode to re-build front on changes:
+npm run dev
+# and start server (use screen managers/another terminal tab/run it through IDEA)
+make run
+```
 
 
 ### Shortcuts
