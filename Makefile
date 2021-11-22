@@ -1,10 +1,10 @@
 all:
 	@echo "Available targets:"
-	@echo "    init"
-	@echo "    clean"
-	@echo "    test"
-	@echo "    lint"
-	@echo "    run"
+	@echo "    init   - Initialize from the scratch"
+	@echo "    clean  - Return project to state before initialization"
+	@echo "    test   - Run tests and critical linting"
+	@echo "    lint   - Run critical and other linting"
+	@echo "    run    - Start development server"
 
 # Initializing environment for development
 init:
